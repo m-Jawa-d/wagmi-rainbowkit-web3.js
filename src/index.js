@@ -3,11 +3,40 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-
+import '@rainbow-me/rainbowkit/styles.css';
+import {
+  getDefaultConfig,
+  RainbowKitProvider,
+} from '@rainbow-me/rainbowkit';
+import { WagmiProvider } from 'wagmi';
+import {
+  sepolia,
+} from 'wagmi/chains';
+import {
+  QueryClientProvider,
+  QueryClient,
+} from "@tanstack/react-query";
 const root = ReactDOM.createRoot(document.getElementById('root'));
+
+
+
+const config = getDefaultConfig({
+  appName: 'My RainbowKit App',
+  projectId: '50a6e74137dee652d0351630a403c3ae',
+  chains: [sepolia],
+  ssr: true, // If your dApp uses server side rendering (SSR)
+});
+const queryClient = new QueryClient();
+
 root.render(
   <React.StrictMode>
+    <WagmiProvider config={config}>
+      <QueryClientProvider client={queryClient}>
+        <RainbowKitProvider>
     <App />
+      </RainbowKitProvider>
+    </QueryClientProvider>
+  </WagmiProvider>
   </React.StrictMode>
 );
 
