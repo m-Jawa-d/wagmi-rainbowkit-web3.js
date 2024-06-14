@@ -9,11 +9,11 @@ import abi from './utils/abi.json'
 function App() {
   const { disconnect } = useDisconnect()
   const { address } = useAccount()
-  const {data: hash, writeContract, isPending, isSuccess } = useWriteContract()
+  const { data: hash, writeContract, isPending, isSuccess } = useWriteContract()
   const [apprAmount, setAppAmount] = useState('')
   const config = useConfig();
   const gas = useGasPrice()
-  const [loader, setLoader]=useState(false)
+  const [loader, setLoader] = useState(false)
   // let result = useWaitForTransactionReceipt({
   //   hash: hash,
   //   query: { enabled: hash !== undefined }
@@ -66,8 +66,8 @@ function App() {
   const handleTransactionSubmitted = async (txHash) => {
     console.log(txHash);
     setLoader(true);
-    const transactionReceipt = await waitForTransactionReceipt(config,{
-      hash: txHash ,
+    const transactionReceipt = await waitForTransactionReceipt(config, {
+      hash: txHash,
     });
     setLoader(false);
     // at this point the tx was mined
@@ -83,27 +83,28 @@ function App() {
       window.alert('Please connect wallet and enter amount')
       return
     }
-     writeContract({
+    writeContract({
       ...usdtContract,
       functionName: 'approve',
       args: [
         Environment.usdt,
         apprAmount * 1e18,
       ],
-},
-       {
-         onSuccess(hash) {handleTransactionSubmitted(hash)},
-       }
+    },
+      {
+        onSuccess(hash) { handleTransactionSubmitted(hash) },
+      }
     )
   }
-//   useEffect(() => {
-//    console.log(result, 'rrrrrrr');
-// console.log(result.isLoading, 'rrrrrrr');
-//   }, [result])
-  
+  //   useEffect(() => {
+  //    console.log(result, 'rrrrrrr');
+  // console.log(result.isLoading, 'rrrrrrr');
+  //   }, [result])
+
   return (
     <div className="App">
       <header className="App-header">
+        <h3>Sepolia Network</h3>
         <div className='flex'>
           {address ?
             <button onClick={disconnect} className='button'>
@@ -111,12 +112,11 @@ function App() {
             </button>
             :
             <>
+
               <WalletButton wallet="metamask" />
               <WalletButton wallet="walletconnect" />
             </>
           }
-
-
         </div>
         {allowanceData && (
           <div className="info">
@@ -125,7 +125,8 @@ function App() {
             <h6>Allowance: {Number(allowanceData[1]?.result) / 1e18}</h6>
           </div>
         )}
-        <div className="write">
+
+        {address && <div className="write">
           {/* <h5>Write contracts</h5> */}
           <input
             className='button'
@@ -134,8 +135,8 @@ function App() {
             placeholder="Enter approve amount"
           />
           <button className='button' onClick={approve}>{(isPending || loader) ? 'Loading...' : 'Approve'}</button>
-        </div>
-        <button className='button' onClick={refetch}>ReFetch</button>
+        </div>}
+        {/* <button className='button' onClick={refetch}>ReFetch</button> */}
       </header>
     </div>
   );
