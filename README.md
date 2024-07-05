@@ -80,10 +80,6 @@ Open your web browser and navigate to http://localhost:3000 to see the app in ac
 
 Contributions are welcome! Please fork the repository and create a pull request with your changes.
 
-## License
-
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
-
 ## Acknowledgments
 
 - [RainbowKit](https://www.rainbowkit.com/)
