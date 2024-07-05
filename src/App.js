@@ -20,7 +20,6 @@ function App() {
   const [loading, setLoading] = useState(false);
   const web3 = useWeb3js({ chainId: sepolia.id });
   const web3js = useWeb3jsSigner({ chainId: sepolia.id });
-
   async function approve() {
     try {
       setLoading(true);
