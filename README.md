@@ -45,7 +45,7 @@ To get started with this project, follow these steps:
 Clone the repository and navigate to the desired branch:
 
 ```bash
-git clone [https://github.com/yourusername/yourrepo.git](https://github.com/m-Jawa-d/wagmi-rainbowkit.git)
+git clone https://github.com/m-Jawa-d/wagmi-rainbowkit.git
 cd wagmi-rainbowkit
 git checkout main # or rainbow-wagmi-web3.js
 npm install
