@@ -35,12 +35,16 @@ function App() {
     }
   }
   // function to get personal sign of account
-  console.log(address, typeof address);
   async function sign() {
-    let message = address
-    const hexMessage = Web3.utils.utf8ToHex(message); 
-    let sign = await web3js.eth.personal.sign(hexMessage, address, '')
-    console.log(sign);
+  try {
+      let message = address
+      const hexMessage = Web3.utils.utf8ToHex(message); 
+      let sign = await web3js.eth.personal.sign(hexMessage, address, '') // to sign data 
+      await web3js.eth.personal.ecRecover(hexMessage, sign) // to verify sign data account 
+  } catch (error) {
+    console.log(error);
+  }
+
   }
   useEffect(() => {
     async function readContract() {
@@ -60,7 +64,7 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <p>{address}</p>
+        <p>{address?.toString()?.slice(0, 8)}...{address?.toString()?.slice(-8)}</p>
         <div className="info">
           <h6>Total Supply: {apprAll.totalSupply}</h6>
           <h6>Allowance: {apprAll.allowance}</h6>
