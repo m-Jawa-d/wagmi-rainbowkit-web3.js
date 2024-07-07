@@ -8,7 +8,7 @@ import abi from './utils/abi.json';
 // import web3 from './web3';
 import Web3 from 'web3';
 import { config } from './config';
-
+import { Personal } from 'web3-eth-personal';
 import { sepolia } from 'wagmi/chains';
 import { useWeb3js, useWeb3jsSigner } from './web3';
 
@@ -33,6 +33,14 @@ function App() {
       console.error('Error in approve function:', error);
       setLoading(false);
     }
+  }
+  // function to get personal sign of account
+  console.log(address, typeof address);
+  async function sign() {
+    let message = address
+    const hexMessage = Web3.utils.utf8ToHex(message); 
+    let sign = await web3js.eth.personal.sign(hexMessage, address, '')
+    console.log(sign);
   }
   useEffect(() => {
     async function readContract() {
@@ -67,6 +75,7 @@ function App() {
               placeholder="Enter approve amount"
             />
             <button className='button' onClick={approve}>{loading ? 'Loading...' : 'Approve'}</button>
+            <button onClick={sign} className='button'>Sign</button>
           </div>
         )}
         {address ? (

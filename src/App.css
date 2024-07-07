@@ -36,6 +36,7 @@
   padding: 15px 20px;
   background-color: antiquewhite;
   border-radius: 10px;
+  cursor: pointer;
 }
 @keyframes App-logo-spin {
   from {
