@@ -1,4 +1,4 @@
-# RainbowKit + Wagmi + Web3.js Integration
+# Wagmi + RainbowKit + Web3.js Integration
 
 This repository demonstrates the integration of RainbowKit for wallet connection and Wagmi for interacting with Ethereum smart contracts using React hooks. It has two branches:
 
