@@ -1,70 +1,88 @@
-# Getting Started with Create React App
+# RainbowKit + Wagmi + Web3.js Integration
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This repository demonstrates the integration of RainbowKit for wallet connection and Wagmi for interacting with Ethereum smart contracts using React hooks. It has two branches:
 
-## Available Scripts
+1. **main**: Uses RainbowKit and Wagmi hooks for both reading from and writing to contracts.
+2. **rainbow-wagmi-web3.js**: Uses RainbowKit for wallet connection and Web3.js for contract interactions, utilizing Wagmi client as a provider.
 
-In the project directory, you can run:
+## Branches
 
-### `npm start`
+### main
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+The `main` branch uses RainbowKit to connect to wallets such as MetaMask and Trust Wallet and leverages Wagmi React hooks for interacting with smart contracts. 
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+- **Deployed Link**: [rain-wagmi.netlify.app](https://rain-wagmi.netlify.app/)
 
-### `npm test`
+#### Features
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- Connect wallets using RainbowKit.
+- Read from and write to Ethereum smart contracts using Wagmi hooks.
+- Easy integration with various Ethereum-based wallets.
 
-### `npm run build`
+### rainbow-wagmi-web3.js
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+The `rainbow-wagmi-web3.js` branch uses RainbowKit to connect to wallets and Web3.js for contract interactions. It uses the Wagmi client as a provider, enabling a streamlined approach to both reading and writing to contracts.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+- **Deployed Link**: [rainbow-wagmi-web3js.netlify.app](https://rainbow-wagmi-web3js.netlify.app/)
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+#### Features
 
-### `npm run eject`
+- Connect wallets using RainbowKit.
+- Use Web3.js for reading from and writing to Ethereum smart contracts.
+- Leverage Wagmi client for enhanced provider management.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## Getting Started
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+To get started with this project, follow these steps:
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+### Prerequisites
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+- Node.js and npm installed on your local machine.
+- A modern web browser to view the app.
 
-## Learn More
+### Installation
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+Clone the repository and navigate to the desired branch:
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+```bash
+git clone https://github.com/m-Jawa-d/wagmi-rainbowkit.git
+cd wagmi-rainbowkit
+git checkout main # or rainbow-wagmi-web3.js
+npm install
+```
+Running the App
+Start the development server:
+```bash
+npm start
+```
+Open your web browser and navigate to http://localhost:3000 to see the app in action.
+## Usage
 
-### Code Splitting
+### Connecting Wallet
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+1. Click on the "Connect Wallet" button.
+2. Select your preferred wallet (e.g., MetaMask, WalletConnect).
+3. Approve the connection in your wallet.
 
-### Analyzing the Bundle Size
+### Interacting with Contracts
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+#### main Branch
 
-### Making a Progressive Web App
+- **Reading Data**: Use Wagmi hooks to read data from contracts.
+- **Writing Data**: Use Wagmi hooks to send transactions and interact with contracts.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+#### rainbow-wagmi-web3.js Branch
 
-### Advanced Configuration
+- **Reading Data**: Use Web3.js to call contract methods.
+- **Writing Data**: Use Web3.js to send transactions and interact with contracts, using Wagmi client as a provider.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+## Contributing
 
-### Deployment
+Contributions are welcome! Please fork the repository and create a pull request with your changes.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+## Acknowledgments
 
-### `npm run build` fails to minify
+- [RainbowKit](https://www.rainbowkit.com/)
+- [Wagmi](https://wagmi.sh/)
+- [Web3.js](https://web3js.readthedocs.io/)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
