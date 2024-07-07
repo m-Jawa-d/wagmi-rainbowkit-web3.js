@@ -1,96 +1,145 @@
-import React, { useEffect, useState } from 'react';
+import logo from './logo.svg';
 import './App.css';
-import { useAccount, useConnectors, useDisconnect } from 'wagmi';
 import { WalletButton } from '@rainbow-me/rainbowkit';
-import getWeb3 from './web3';
-import Environment from './utils/Environment';
-import abi from './utils/abi.json';
-// import web3 from './web3';
-import Web3 from 'web3';
-import { config } from './config';
-
-import { sepolia } from 'wagmi/chains';
-import { useWeb3js, useWeb3jsSigner } from './web3';
-
+import { useAccount, useAccountEffect, useDisconnect, useReadContracts, useSignMessage, useWriteContract, useWaitForTransactionReceipt, useConfig, useGasPrice } from 'wagmi';
+import { waitForTransactionReceipt } from "@wagmi/core";
+import { useEffect, useState } from 'react';
+import Environment from './utils/Environment'
+import abi from './utils/abi.json'
 function App() {
-  const { address } = useAccount();
-  const { disconnect } = useDisconnect();
-  const [apprAll, setApprAll] = useState({ totalSupply: 0, allowance: 0 });
-  const [apprAmount, setAppAmount] = useState('');
-  const [loading, setLoading] = useState(false);
-  const web3 = useWeb3js({ chainId: sepolia.id });
-  const web3js = useWeb3jsSigner({ chainId: sepolia.id });
+  const { disconnect } = useDisconnect()
+  const { address } = useAccount()
+  const { data: hash, writeContract, isPending, isSuccess } = useWriteContract()
+  const [apprAmount, setAppAmount] = useState('')
+  const config = useConfig();
+  const gas = useGasPrice()
+  const [loader, setLoader] = useState(false)
+  // let result = useWaitForTransactionReceipt({
+  //   hash: hash,
+  //   query: { enabled: hash !== undefined }
+  // })
+  const { signMessage } = useSignMessage({
+    mutation: {
+      onError(error) {
+        localStorage.removeItem('sign')
+        disconnect()
+        console.log('Disconnected!', error)
+      }
+    }
+  })
+  useAccountEffect({
+    onConnect(data) {
+      //  data.address && refetch()
+      // console.log(data);
+      let signData = localStorage.getItem('sign')
 
-  async function approve() {
-    try {
-      setLoading(true);
-      const contract = new web3js.eth.Contract(abi, Environment.usdt);
-      const apprAmountInWei = Web3.utils.toWei(apprAmount, 'ether');
-      const gas = await contract.methods.approve(Environment.usdt, apprAmountInWei).estimateGas({from: address});
-      await contract.methods.approve(Environment.usdt, apprAmountInWei).send({ from: address, gas });
-      setLoading(false);
-      setAppAmount('');
-    } catch (error) {
-      console.error('Error in approve function:', error);
-      setLoading(false);
-    }
+      if (!signData) {
+        signMessage({ message: data?.address })
+        localStorage.setItem('sign', data?.address)
+
+      }
+
+    },
+    onDisconnect() {
+      localStorage.removeItem('sign')
+      // console.log('Disconnected!')
+    },
+  })
+  const usdtContract = {
+    address: Environment?.usdt,
+    abi: abi,
   }
-  useEffect(() => {
-    async function readContract() {
-      const contract = new web3.eth.Contract(abi, Environment.usdt);
-      const totalSupply = await contract.methods.totalSupply().call();
-      const allowance = await contract.methods.allowance(address, Environment.usdt).call();
-      setApprAll({
-        totalSupply: Web3.utils.fromWei(totalSupply, 'ether'),
-        allowance: Web3.utils.fromWei(allowance, 'ether'),
-      });
+  const { data: allowanceData, refetch } = useReadContracts({
+    contracts: [
+      {
+        ...usdtContract,
+        functionName: 'totalSupply',
+      },
+      {
+        ...usdtContract,
+        functionName: 'allowance',
+        args: [address, Environment.usdt],
+      },
+    ],
+    query: { enabled: !!address, gcTime: Infinity }, // This ensures the query will only execute if address is truthy
+  });
+  const handleTransactionSubmitted = async (txHash) => {
+    console.log(txHash);
+    setLoader(true);
+    const transactionReceipt = await waitForTransactionReceipt(config, {
+      hash: txHash,
+    });
+    setLoader(false);
+    // at this point the tx was mined
+    if (transactionReceipt.status === "success") {
+      // execute your logic here
+      setAppAmount()
+      refetch()
+      // window.alert('transaction successfully committed')
     }
-    if (address) {
-      readContract();
+  };
+  async function approve() {
+    if (!address || !apprAmount) {
+      window.alert('Please connect wallet and enter amount')
+      return
     }
-  }, [address, !loading]);
+    writeContract({
+      ...usdtContract,
+      functionName: 'approve',
+      args: [
+        Environment.usdt,
+        apprAmount * 1e18,
+      ],
+    },
+      {
+        onSuccess(hash) { handleTransactionSubmitted(hash) },
+      }
+    )
+  }
+  //   useEffect(() => {
+  //    console.log(result, 'rrrrrrr');
+  // console.log(result.isLoading, 'rrrrrrr');
+  //   }, [result])
 
   return (
     <div className="App">
       <header className="App-header">
-        <p>{address}</p>
-        <div className="info">
-          <h6>Total Supply: {apprAll.totalSupply}</h6>
-          <h6>Allowance: {apprAll.allowance}</h6>
+        <h3>Sepolia Network</h3>
+        <div className='flex'>
+          {address ?
+            <button onClick={disconnect} className='button'>
+              Disconnect
+            </button>
+            :
+            <>
+
+              <WalletButton wallet="metamask" />
+              <WalletButton wallet="walletconnect" />
+            </>
+          }
         </div>
-        {address && (
-          <div className="write">
-            <input
-              value={apprAmount}
-              className='button'
-              onChange={(e) => setAppAmount(e.target.value)}
-              type='number'
-              placeholder="Enter approve amount"
-            />
-            <button className='button' onClick={approve}>{loading ? 'Loading...' : 'Approve'}</button>
+        {allowanceData && (
+          <div className="info">
+            {/* <h5>Read contracts</h5> */}
+            <h6>Total Supply: {Number(allowanceData[0]?.result) / 1e18}</h6>
+            <h6>Allowance: {Number(allowanceData[1]?.result) / 1e18}</h6>
           </div>
         )}
-        {address ? (
-          <button onClick={disconnect} className='button'>Disconnect</button>
-        ) : (
-          <>
-            <WalletButton wallet="metamask" />
-            <WalletButton wallet="walletconnect" />
-          </>
-        )}
+
+        {address && <div className="write">
+          {/* <h5>Write contracts</h5> */}
+          <input
+            className='button'
+            onChange={(e) => setAppAmount(e.target.value)}
+            type='number'
+            placeholder="Enter approve amount"
+          />
+          <button className='button' onClick={approve}>{(isPending || loader) ? 'Loading...' : 'Approve'}</button>
+        </div>}
+        {/* <button className='button' onClick={refetch}>ReFetch</button> */}
       </header>
     </div>
   );
 }
 
 export default App;
-
-
-// // const transactionParameters = {
-// // from: address, // Your wallet address
-//         // gas: await web3js.eth.estimateGas({
-//         //   to: Environment.usdt,
-//         //   from: address,
-//         //   data: contract.methods.approve(Environment.usdt, apprAmountInWei).encodeABI()
-//         // }),
-//       };
