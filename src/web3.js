@@ -5,20 +5,22 @@ import { useClient, useConnectorClient } from 'wagmi';
 /**
  * Converts a Wagmi client into a Web3.js instance.
  * @param {Object} client - The Wagmi client object.
- * @returns {Object} - A Web3.js instance.
+ * @returns {Web3} - A Web3.js instance.
  */
 function clientToWeb3js(client) {
     if (!client) {
-        // If no client is provided, return a default Web3 instance.
+        // Return a default Web3 instance if no client is provided.
         return new Web3();
     }
 
     const { transport } = client;
-    // Check if the transport type is 'fallback'.
+    
+    // Handle 'fallback' transport type.
     if (transport.type === 'fallback') {
         // Use the URL of the first transport in the fallback transports array.
         return new Web3(transport.transports[0].value.url);
     }
+
     // Return a new Web3 instance using the provided transport.
     return new Web3(transport);
 }
@@ -27,12 +29,13 @@ function clientToWeb3js(client) {
  * Custom hook to create a Web3.js instance for read-only operations.
  * @param {Object} options - The options object.
  * @param {number} options.chainId - The chain ID to connect to.
- * @returns {Object} - A Web3.js instance.
+ * @returns {Web3} - A Web3.js instance.
  */
 export function useWeb3js({ chainId } = {}) {
-    // Get the client using useClient from Wagmi. This client does not have access to private keys.
+    // Retrieve the client using useClient from Wagmi (read-only access).
     const client = useClient({ chainId });
-    // Use useMemo to memoize the Web3.js instance created from the client.
+
+    // Memoize the Web3.js instance created from the client.
     return useMemo(() => clientToWeb3js(client), [client]);
 }
 
@@ -40,11 +43,12 @@ export function useWeb3js({ chainId } = {}) {
  * Custom hook to create a Web3.js instance for write operations (transactions).
  * @param {Object} options - The options object.
  * @param {number} options.chainId - The chain ID to connect to.
- * @returns {Object} - A Web3.js instance.
+ * @returns {Web3} - A Web3.js instance.
  */
 export function useWeb3jsSigner({ chainId } = {}) {
-    // Get the connector client using useConnectorClient from Wagmi. This client has access to private keys.
+    // Retrieve the connector client using useConnectorClient from Wagmi (write access).
     const { data: client } = useConnectorClient({ chainId });
-    // Use useMemo to memoize the Web3.js instance created from the connector client.
+
+    // Memoize the Web3.js instance created from the connector client.
     return useMemo(() => clientToWeb3js(client), [client]);
 }
