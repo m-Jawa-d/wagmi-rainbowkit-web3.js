@@ -86,3 +86,4 @@ Contributions are welcome! Please fork the repository and create a pull request 
 - [Wagmi](https://wagmi.sh/)
 - [Web3.js](https://web3js.readthedocs.io/)
 
+A star to the repo would be great 🥹.
