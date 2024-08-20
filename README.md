@@ -59,7 +59,7 @@ Open your web browser and navigate to http://localhost:3000 to see the app in ac
 ## Usage
 
 ### Connecting Wallet
-🇲🇽
+
 1. Click on the "Connect Wallet" button.
 2. Select your preferred wallet (e.g., MetaMask, WalletConnect).
 3. Approve the connection in your wallet.
