@@ -59,7 +59,7 @@ Open your web browser and navigate to http://localhost:3000 to see the app in ac
 ## Usage
 
 ### Connecting Wallet
-
+🇲🇽
 1. Click on the "Connect Wallet" button.
 2. Select your preferred wallet (e.g., MetaMask, WalletConnect).
 3. Approve the connection in your wallet.
@@ -86,4 +86,4 @@ Contributions are welcome! Please fork the repository and create a pull request 
 - [Wagmi](https://wagmi.sh/)
 - [Web3.js](https://web3js.readthedocs.io/)
 
-A star to this repo would be great 🥹.
+A star to this repo would be great .
